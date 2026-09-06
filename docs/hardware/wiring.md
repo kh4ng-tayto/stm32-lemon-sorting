@@ -42,4 +42,34 @@
 |----------|----------|-------|-------|
 | IR1 (Good) | OUT | PB0 | 5V + GND |
 | IR2 (Bad)  | OUT | PB1 | 5V + GND |
+## 6. Kết nối động cơ DC + mạch điều tốc
+Pin Makita 18–21V → Mạch điều tốc PWM 5A → Động cơ DC 12–24V
 
+
+- Tốc độ điều chỉnh bằng **núm chiết áp** trên mạch điều tốc.
+- **Không** kết nối với STM32 (hoạt động độc lập).
+
+## 7. Phân phối nguồn 5V (sau module XL4015)
+Pin Makita → XL4015 (hạ áp) → 5V
+├── Servo 1 & 2
+├── IR Sensor 1 & 2
+├── LCD 16x2
+└── LED báo trạng thái (nếu có)
+
+
+> **Quan trọng**: Tất cả GND phải được nối chung (common ground) giữa STM32, 5V và các thiết bị ngoại vi.
+
+## 8. Sơ đồ chân STM32F103C6T6 sử dụng
+
+| Chân STM32 | Chức năng |
+|------------|-----------|
+| PA9        | UART TX   |
+| PA10       | UART RX   |
+| PA0        | PWM Servo 1 (Good) |
+| PA1        | PWM Servo 2 (Bad)  |
+| PB0        | IR1 (Good) |
+| PB1        | IR2 (Bad)  |
+| PB6        | I²C SCL    |
+| PB7        | I²C SDA    |
+| PA13       | SWDIO (nạp chương trình) |
+| PA14       | SWCLK (nạp chương trình) |
