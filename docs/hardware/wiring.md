@@ -54,8 +54,6 @@ Pin Makita → XL4015 (hạ áp) → 5V
 ├── Servo 1 & 2
 ├── IR Sensor 1 & 2
 ├── LCD 16x2
-└── LED báo trạng thái (nếu có)
-
 
 > **Quan trọng**: Tất cả GND phải được nối chung (common ground) giữa STM32, 5V và các thiết bị ngoại vi.
 
