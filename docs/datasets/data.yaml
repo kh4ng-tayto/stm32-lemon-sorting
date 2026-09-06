@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 2
+names: ['Bad', 'Good']
+
+roboflow:
+  workspace: khangs-workspace-ygoif
+  project: lemon1-wni0o
+  version: 7
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/khangs-workspace-ygoif/lemon1-wni0o/dataset/7
