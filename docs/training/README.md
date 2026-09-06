@@ -14,14 +14,6 @@ Thư mục này mô tả quá trình xây dựng bộ dữ liệu, huấn luyệ
 | Kích thước suy luận | `imgsz=320` |
 | Confidence threshold | 0.60 |
 
-## Cấu trúc thư mục
-training/
-├── README.md
-├── dataset.md          ← Cách xây dựng & chia dataset
-├── train.md            ← Cấu hình & lệnh huấn luyện
-├── evaluate.md         ← Kết quả đánh giá
-└── results/            ← Ảnh confusion matrix, PR curve, results.png...
-
 ## Kết quả chính (tập kiểm thử độc lập)
 
 | Metric | Giá trị |
