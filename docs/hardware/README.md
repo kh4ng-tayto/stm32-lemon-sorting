@@ -25,7 +25,7 @@ hardware/
 
 - [Danh sách linh kiện](components.md)
 - [Sơ đồ kết nối chi tiết](wiring.md)
-- Ảnh thực tế mô hình: [hardware/images](images)
+- Ảnh thực tế mô hình: [](images)
 
 ## Lưu ý quan trọng
 
