@@ -71,7 +71,7 @@ Tập Train có tổng cộng **2.723 đối tượng**, gồm:
 
 Hình dưới thể hiện phân bố lớp, vị trí và kích thước bounding box trong tập huấn luyện.
 
-![Dataset Distribution](images/dataset_distribution.png)
+![Dataset Distribution](images/dataset_distribution.jpg)
 
 ---
 
@@ -165,7 +165,7 @@ Kết quả của mô hình trên tập Validation:
 
 ### Precision-Recall Curve
 
-![Validation PR Curve](images/pr_curve_validation.png)
+![Validation PR Curve](images/pr_curve_validatio.png)
 
 ### Confusion Matrix
 
