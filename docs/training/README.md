@@ -1,13 +1,13 @@
-# Huấn luyện mô hình YOLOv8s
+# Huấn luyện và đánh giá mô hình YOLOv8s
 
-Thư mục này trình bày quá trình xây dựng bộ dữ liệu, cấu hình huấn luyện và đánh giá mô hình **YOLOv8s** sử dụng trong hệ thống phân loại chất lượng quả chanh.
+Thư mục này trình bày quá trình chuẩn bị dữ liệu, huấn luyện và đánh giá mô hình **YOLOv8s** dùng trong hệ thống phân loại chất lượng quả chanh.
 
 Mô hình thực hiện bài toán **Object Detection** với hai lớp:
 
 - `Good`: chanh tốt
 - `Bad`: chanh hỏng
 
-Sau khi huấn luyện, trọng số tốt nhất `best.pt` được sử dụng trong chương trình Python để nhận diện chanh theo thời gian thực từ webcam.
+Sau khi huấn luyện, trọng số tốt nhất `best.pt` được sử dụng trong chương trình Python để nhận diện quả chanh từ webcam theo thời gian thực.
 
 ---
 
@@ -19,12 +19,9 @@ Sau khi huấn luyện, trọng số tốt nhất `best.pt` được sử dụng
 | Mô hình | YOLOv8s |
 | Framework | Ultralytics |
 | Dataset | Roboflow v7 |
-| Số lớp | 2 |
 | Classes | Good / Bad |
 | Tổng số ảnh | 2.524 |
 | Tổng số đối tượng | 3.353 |
-| Good | 1.884 đối tượng |
-| Bad | 1.469 đối tượng |
 | Môi trường huấn luyện | Kaggle |
 | GPU | NVIDIA Tesla T4 |
 | Trọng số tốt nhất | `best.pt` |
@@ -33,11 +30,9 @@ Sau khi huấn luyện, trọng số tốt nhất `best.pt` được sử dụng
 
 ## 2. Bộ dữ liệu
 
-Bộ dữ liệu được xây dựng để nhận diện và phân loại quả chanh thành hai nhóm chất lượng `Good` và `Bad`.
+Bộ dữ liệu gồm hình ảnh quả chanh được gán nhãn bằng **bounding box** và chia thành hai lớp `Good` và `Bad`.
 
-Mỗi quả chanh trong ảnh được gán nhãn bằng **bounding box** và class tương ứng.
-
-### Thống kê đối tượng
+### Thống kê toàn bộ dữ liệu
 
 | Class | Số đối tượng |
 |---|---:|
@@ -47,8 +42,6 @@ Mỗi quả chanh trong ảnh được gán nhãn bằng **bounding box** và cl
 
 ### Phân chia dữ liệu
 
-Bộ dữ liệu Roboflow phiên bản v7 gồm tổng cộng **2.524 ảnh** và được chia thành:
-
 | Dataset | Tỷ lệ | Số ảnh |
 |---|---:|---:|
 | Train | 80% | 2.030 |
@@ -56,19 +49,19 @@ Bộ dữ liệu Roboflow phiên bản v7 gồm tổng cộng **2.524 ảnh** v�
 | Test | 10% | 248 |
 | **Tổng cộng** | **100%** | **2.524** |
 
-Dữ liệu trên Roboflow được tiền xử lý bằng:
+Dữ liệu được tiền xử lý trên Roboflow bằng:
 
 - Auto-Orient
-- Resize về kích thước `640 × 640`
+- Resize về `640 × 640`
 - Không tạo thêm ảnh augmentation cố định trên Roboflow
 
-Các phép tăng cường dữ liệu được Ultralytics áp dụng trực tuyến trong quá trình huấn luyện.
+Các phép augmentation được Ultralytics áp dụng trực tuyến trong quá trình huấn luyện.
 
 ---
 
 ## 3. Phân bố dữ liệu huấn luyện
 
-Riêng tập Train có tổng cộng **2.723 đối tượng**:
+Tập Train có tổng cộng **2.723 đối tượng**, gồm:
 
 | Class | Số đối tượng |
 |---|---:|
@@ -76,9 +69,8 @@ Riêng tập Train có tổng cộng **2.723 đối tượng**:
 | Bad | 1.180 |
 | **Tổng cộng** | **2.723** |
 
-Số lượng đối tượng Good cao hơn Bad nhưng cả hai lớp đều có hơn 1.000 mẫu để mô hình học các đặc trưng.
+Hình dưới thể hiện phân bố lớp, vị trí và kích thước bounding box trong tập huấn luyện.
 
-<!-- Thêm ảnh thống kê dataset nếu có -->
 ![Dataset Distribution](images/dataset_distribution.png)
 
 ---
@@ -93,8 +85,8 @@ Quá trình huấn luyện được thực hiện trên **Kaggle** với GPU **N
 |---|---|
 | Model | `yolov8s.pt` |
 | Task | Detection |
-| Epoch tối đa | 120 |
-| Epoch thực tế | 118 |
+| Maximum Epochs | 120 |
+| Actual Epochs | 118 |
 | Early Stopping | `patience=25` |
 | Batch Size | 16 |
 | Image Size | `640 × 640` |
@@ -106,9 +98,9 @@ Quá trình huấn luyện được thực hiện trên **Kaggle** với GPU **N
 
 Mô hình được đánh giá trên tập Validation sau mỗi epoch.
 
-Giá trị **fitness tốt nhất xuất hiện tại epoch 93**. Sau 25 epoch tiếp theo không có cải thiện, cơ chế Early Stopping kết thúc quá trình huấn luyện tại epoch 118.
+Giá trị fitness tốt nhất được ghi nhận tại **epoch 93**. Sau 25 epoch tiếp theo không có cải thiện, cơ chế Early Stopping kết thúc quá trình huấn luyện tại epoch 118.
 
-Trọng số tại epoch tốt nhất được Ultralytics lưu thành:
+Trọng số tốt nhất được Ultralytics lưu thành:
 
 ```text
 best.pt
@@ -118,7 +110,7 @@ best.pt
 
 ## 5. Data Augmentation
 
-Trong quá trình huấn luyện, Ultralytics áp dụng augmentation trực tuyến cho dữ liệu Train.
+Ultralytics áp dụng các phép augmentation trực tuyến cho dữ liệu Train trong quá trình huấn luyện.
 
 | Augmentation | Giá trị |
 |---|---|
@@ -132,17 +124,21 @@ Trong quá trình huấn luyện, Ultralytics áp dụng augmentation trực tuy
 | Mosaic | `mosaic=1.0` |
 | Close Mosaic | `close_mosaic=10` |
 
-Mosaic được sử dụng trong quá trình huấn luyện và được tắt trong **10 epoch cuối**.
+Mosaic được sử dụng trong phần lớn quá trình huấn luyện và được tắt trong **10 epoch cuối**.
 
 `MixUp` và `CutMix` không được sử dụng.
 
-Các phép augmentation chỉ được áp dụng cho tập Train và không được áp dụng cho Validation hoặc Test.
+Các phép augmentation này chỉ áp dụng cho tập Train.
 
 ---
 
 ## 6. Kết quả huấn luyện
 
-Các đường cong huấn luyện cho thấy sự thay đổi của:
+Biểu đồ dưới đây thể hiện quá trình thay đổi của các hàm loss và chỉ số đánh giá trong quá trình huấn luyện YOLOv8s.
+
+![Training Results](images/results.png)
+
+Các chỉ số chính bao gồm:
 
 - Box Loss
 - Classification Loss
@@ -152,11 +148,7 @@ Các đường cong huấn luyện cho thấy sự thay đổi của:
 - mAP@0.5
 - mAP@0.5:0.95
 
-trong quá trình huấn luyện YOLOv8s.
-
-![Training Results](images/results.png)
-
-Trọng số có kết quả tốt nhất được ghi nhận tại **epoch 93**.
+Trọng số tốt nhất được ghi nhận tại **epoch 93**.
 
 ---
 
@@ -179,13 +171,13 @@ Kết quả của mô hình trên tập Validation:
 
 ![Validation Confusion Matrix](images/confusion_matrix_validation.png)
 
-Kết quả Validation cho thấy mô hình có khả năng nhận diện tốt hai lớp Good và Bad trên dữ liệu được sử dụng trong quá trình phát triển mô hình.
+Kết quả Validation cho thấy mô hình có khả năng nhận diện tốt hai lớp `Good` và `Bad` trên dữ liệu xác thực được sử dụng trong quá trình huấn luyện.
 
 ---
 
 ## 8. Kết quả trên tập Test Roboflow v7
 
-Sau khi hoàn thành huấn luyện, trọng số tốt nhất `best.pt` được đánh giá trên **248 ảnh Test** của bộ dữ liệu Roboflow v7.
+Sau khi huấn luyện, trọng số tốt nhất `best.pt` được đánh giá trên **248 ảnh Test** của bộ dữ liệu Roboflow v7.
 
 | Metric | Kết quả |
 |---|---:|
@@ -201,31 +193,31 @@ AP@0.5 theo từng lớp:
 | Bad | 98,4% |
 | Good | 98,9% |
 
-### Precision-Recall Curve
-
-![Roboflow Test PR Curve](images/pr_curve_test_v7.png)
-
-### Confusion Matrix
-
-![Roboflow Test Confusion Matrix](images/confusion_matrix_test_v7.png)
-
-> **Lưu ý:** Bộ dữ liệu Roboflow v7 được phân chia theo ảnh. Một số ảnh chụp ở các góc khác nhau của cùng một quả chanh có thể xuất hiện ở cả tập Train và Test. Vì vậy, kết quả trên tập Test v7 được sử dụng như kết quả tham khảo và không được chọn làm kết quả chính để đánh giá khả năng tổng quát hóa.
+> **Lưu ý:** Bộ dữ liệu Roboflow v7 được phân chia theo ảnh. Một số ảnh chụp ở các góc khác nhau của cùng một quả chanh có thể xuất hiện ở cả tập Train và Test. Vì vậy, kết quả trên tập Test v7 được sử dụng như kết quả tham khảo và không được chọn làm kết quả chính để đánh giá khả năng tổng quát hóa của mô hình.
 
 ---
 
 ## 9. Kiểm thử trên bộ dữ liệu độc lập
 
-Để đánh giá khả năng tổng quát hóa tốt hơn, mô hình được kiểm tra thêm trên một bộ dữ liệu độc lập được thu thập riêng và không sử dụng trong quá trình huấn luyện.
+Để đánh giá khả năng tổng quát hóa trên dữ liệu chưa được sử dụng trong quá trình huấn luyện, mô hình được kiểm tra thêm trên một bộ dữ liệu độc lập.
 
-Bộ dữ liệu độc lập phiên bản v4 gồm:
+Bộ dữ liệu độc lập được thu thập trong một đợt riêng và không được sử dụng để:
 
-- 246 ảnh tổng cộng
-- 243 ảnh Test
-- 3 ảnh Validation
-- 268 đối tượng được gán nhãn
-- Không có ảnh Training
+- Huấn luyện mô hình
+- Lựa chọn epoch
+- Điều chỉnh mô hình
 
-Kết quả dưới đây được tính trên **243 ảnh Test chứa 265 đối tượng**.
+Phiên bản dữ liệu độc lập gồm:
+
+| Thông tin | Giá trị |
+|---|---:|
+| Tổng số ảnh | 246 |
+| Test | 243 |
+| Validation | 3 |
+| Train | 0 |
+| Tổng số đối tượng | 268 |
+
+Kết quả đánh giá chính được tính trên **243 ảnh Test chứa 265 đối tượng**:
 
 | Class | Số đối tượng |
 |---|---:|
@@ -257,11 +249,11 @@ AP@0.5 theo từng lớp:
 
 ![Independent Test Confusion Matrix](images/confusion_matrix_independent.png)
 
-Kết quả trên bộ dữ liệu độc lập được sử dụng làm **kết quả chính** để đánh giá khả năng tổng quát hóa của mô hình vì các ảnh này không được sử dụng trong quá trình huấn luyện hoặc lựa chọn mô hình.
+Kết quả trên bộ dữ liệu độc lập được sử dụng làm **kết quả chính** để đánh giá khả năng tổng quát hóa của mô hình.
 
 ---
 
-## 10. So sánh kết quả
+## 10. So sánh kết quả đánh giá
 
 | Dataset | Precision | Recall | mAP@0.5 | mAP@0.5:0.95 |
 |---|---:|---:|---:|---:|
@@ -269,13 +261,13 @@ Kết quả trên bộ dữ liệu độc lập được sử dụng làm **kế
 | Roboflow v7 Test | 98,53% | 96,88% | 98,67% | 90,80% |
 | **Independent Test** | **95,32%** | **92,90%** | **95,76%** | **82,12%** |
 
-Kết quả trên bộ dữ liệu độc lập thấp hơn so với Validation và Test v7, nhưng vẫn cho thấy mô hình có khả năng nhận diện hai lớp Good và Bad trên dữ liệu chưa được sử dụng trong quá trình huấn luyện.
+Kết quả trên bộ dữ liệu độc lập thấp hơn so với Validation và Test v7 nhưng phản ánh thực tế hơn khả năng tổng quát hóa của mô hình trên dữ liệu chưa được sử dụng trong quá trình phát triển mô hình.
 
 ---
 
 ## 11. Cấu hình đánh giá
 
-Các lần đánh giá ngoại tuyến sử dụng trọng số tốt nhất `best.pt` với cấu hình:
+Các lần đánh giá ngoại tuyến sử dụng trọng số tốt nhất `best.pt`.
 
 | Tham số | Giá trị |
 |---|---|
@@ -288,7 +280,7 @@ Các lần đánh giá ngoại tuyến sử dụng trọng số tốt nhất `be
 | Plots | `True` |
 | Ultralytics | 8.4.132 |
 
-Lệnh đánh giá:
+Ví dụ lệnh đánh giá:
 
 ```python
 results = model.val(
@@ -305,13 +297,13 @@ results = model.val(
 
 ## 12. Triển khai mô hình
 
-Cấu hình huấn luyện và đánh giá sử dụng:
+Cấu hình huấn luyện và đánh giá ngoại tuyến sử dụng:
 
 ```text
 imgsz=640
 ```
 
-Khi triển khai nhận diện theo thời gian thực từ webcam, hệ thống sử dụng:
+Khi triển khai mô hình nhận diện theo thời gian thực từ webcam, hệ thống sử dụng:
 
 ```text
 imgsz=320
@@ -320,15 +312,15 @@ confidence=0.60
 
 Kích thước ảnh nhỏ hơn được sử dụng nhằm giảm khối lượng tính toán và duy trì tốc độ xử lý gần thời gian thực.
 
-Trong thử nghiệm thực tế, tốc độ hiển thị của hệ thống đạt khoảng:
+Trong quá trình thử nghiệm, tốc độ hiển thị đạt khoảng:
 
 ```text
-30.2 – 31.4 FPS
+30.2 - 31.4 FPS
 ```
 
 ---
 
-## 13. Luồng xử lý mô hình
+## 13. Luồng hoạt động
 
 ```text
 Lemon Dataset
@@ -351,30 +343,17 @@ Validation
       ▼
 best.pt
       │
-      ├──────────────► Roboflow v7 Test
+      ▼
+Independent Test
       │
-      └──────────────► Independent Test
-                              │
-                              ▼
-                     Model Evaluation
-                              │
-                              ▼
-                     Real-time Deployment
+      ▼
+Model Evaluation
+      │
+      ▼
+Real-time Deployment
 ```
 
----
-
-## 14. Ứng dụng trong hệ thống
-
-Sau khi huấn luyện và đánh giá, file trọng số:
-
-```text
-best.pt
-```
-
-được sử dụng trong chương trình Python để xử lý hình ảnh từ **USB webcam**.
-
-Luồng hoạt động khi triển khai:
+Khi triển khai trong hệ thống:
 
 ```text
 USB Webcam
@@ -401,13 +380,13 @@ STM32F103C6T6
 Servo Sorting Mechanism
 ```
 
-Máy tính đảm nhiệm xử lý ảnh và chạy YOLOv8s, trong khi STM32F103C6T6 nhận kết quả phân loại qua UART và điều khiển phần cứng của hệ thống.
+Máy tính đảm nhiệm xử lý ảnh và chạy YOLOv8s. STM32F103C6T6 nhận kết quả phân loại thông qua UART và điều khiển cơ cấu gạt sản phẩm.
 
 ---
 
-## 15. Kết luận
+## 14. Kết luận
 
-Mô hình YOLOv8s được huấn luyện trên bộ dữ liệu gồm **2.524 ảnh và 3.353 đối tượng** thuộc hai lớp Good và Bad.
+Mô hình YOLOv8s được huấn luyện trên bộ dữ liệu gồm **2.524 ảnh và 3.353 đối tượng** thuộc hai lớp `Good` và `Bad`.
 
 Kết quả chính trên bộ dữ liệu kiểm thử độc lập gồm 243 ảnh đạt:
 
@@ -416,11 +395,11 @@ Kết quả chính trên bộ dữ liệu kiểm thử độc lập gồm 243 �
 - **mAP@0.5: 95,76%**
 - **mAP@0.5:0.95: 82,12%**
 
-Sau khi đánh giá, trọng số tốt nhất `best.pt` được tích hợp vào chương trình Python để thực hiện nhận diện quả chanh theo thời gian thực và truyền kết quả phân loại đến STM32F103C6T6 thông qua UART.
+Sau khi đánh giá, trọng số tốt nhất `best.pt` được sử dụng trong chương trình Python để nhận diện quả chanh theo thời gian thực và truyền kết quả phân loại đến STM32F103C6T6 thông qua UART.
 
 ---
 
-## Files
+## Cấu trúc thư mục
 
 ```text
 training/
@@ -430,8 +409,6 @@ training/
     ├── results.png
     ├── pr_curve_validation.png
     ├── confusion_matrix_validation.png
-    ├── pr_curve_test_v7.png
-    ├── confusion_matrix_test_v7.png
     ├── pr_curve_independent.png
     └── confusion_matrix_independent.png
 ```
