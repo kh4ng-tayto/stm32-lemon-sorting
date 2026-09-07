@@ -1,8 +1,8 @@
 # STM32-Based Lemon Sorting System
 
-An automated lime quality grading system on a conveyor belt utilizing **YOLOv8s**, **OpenCV**, and the **STM32F103C6T6** microcontroller.
+An automatic lemon quality sorting system using **YOLOv8s**, **OpenCV**, and **STM32F103C6T6**.
 
-A webcam captures real-time images of the limes. A computer employs YOLOv8s to detect and classify the produce into two categories: "Good" and "Bad." The classification results are transmitted to the STM32 via UART to control sensors and servos, as well as to update information on an LCD display.
+A USB webcam captures lemons moving on a conveyor belt. The PC processes the camera stream using YOLOv8s and classifies each lemon as `Good` or `Bad`. The classification result is then transmitted to the STM32 through UART. The STM32 handles IR sensors, servo motors, product counting, and LCD display.
 
 ---
 
@@ -17,7 +17,7 @@ A webcam captures real-time images of the limes. A computer employs YOLOv8s to d
                        ▼
                    YOLOv8s
                        │
-                 Good / Bad
+                  Good / Bad
                        │
                        ▼
                 UART via CH340
@@ -31,13 +31,13 @@ A webcam captures real-time images of the limes. A computer employs YOLOv8s to d
                  │              │
                  └──────┬───────┘
                         ▼
-                 Lemon Sorting
+                  Lemon Sorting
 ```
 
-<!-- Thêm ảnh hệ thống sau -->
+<!-- Add a real system image later -->
 <!-- ![System Overview](docs/system/system_overview.jpg) -->
 
-<!-- Thêm sơ đồ kiến trúc sau -->
+<!-- Add a system architecture diagram later -->
 <!-- ![System Architecture](docs/system/architecture.png) -->
 
 ---
@@ -45,13 +45,15 @@ A webcam captures real-time images of the limes. A computer employs YOLOv8s to d
 ## Main Features
 
 - Real-time lemon detection using YOLOv8s
-- Classification into `Good` and `Bad`
-- Object tracking to avoid duplicate classification
+- Lemon quality classification into `Good` and `Bad`
+- Object tracking across consecutive frames
+- Stable-class verification before sending a result
 - Sorting-line based trigger logic
+- Duplicate UART command prevention
 - UART communication between PC and STM32
 - FIFO queue for classification commands
-- Two IR sensors for product position detection
-- Two servo motors for sorting
+- Two IR sensors for detecting lemons at sorting positions
+- Two servo motors for physical sorting
 - LCD 16x2 for displaying product counters
 - Real-time FPS and system status display
 
@@ -64,53 +66,55 @@ A webcam captures real-time images of the limes. A computer employs YOLOv8s to d
 | STM32F103C6T6 | Main embedded controller |
 | USB Webcam | Captures lemon images |
 | CH340 USB-to-UART | Communication between PC and STM32 |
-| 2 × MG90S Servo | Sorting mechanism |
+| 2 × MG90S Servo | Physical sorting mechanism |
 | 2 × IR Sensor | Detects lemons at sorting positions |
-| LCD 16x2 + I2C | Displays system information |
-| DC Motor | Drives conveyor belt |
-| PWM Speed Controller | Controls conveyor speed |
-| XL4015 | Provides 5 V supply for peripheral devices |
+| LCD 16x2 + I2C Module | Displays system information |
+| DC Motor | Drives the conveyor belt |
+| PWM Speed Controller | Adjusts conveyor speed |
+| XL4015 | Provides a regulated 5 V supply |
 | Conveyor Belt | Transports lemons |
 
 ---
 
-## Software & Technologies
+## Software and Technologies
 
 | Technology | Usage |
 |---|---|
-| Python | Computer vision application |
+| Python | Main computer vision application |
 | OpenCV | Webcam capture and image processing |
 | YOLOv8s | Lemon detection and classification |
 | Ultralytics | YOLO training and inference |
 | PySerial | UART communication |
 | STM32CubeIDE | STM32 firmware development |
-| STM32 HAL | Peripheral control |
-| Roboflow | Dataset management and annotation |
+| STM32 HAL | STM32 peripheral control |
+| Roboflow | Dataset annotation and management |
 | Kaggle | YOLOv8s training and evaluation |
 
 ---
 
 ## YOLOv8s Model
 
-The model was trained to detect two lemon quality classes:
+The YOLOv8s model detects two lemon quality classes:
 
 ```text
 0 - Good
 1 - Bad
 ```
 
-Main dataset:
+### Dataset
 
 | Information | Value |
 |---|---:|
-| Images | 2,524 |
-| Objects | 3,353 |
+| Total Images | 2,524 |
+| Total Objects | 3,353 |
 | Classes | 2 |
-| Train | 2,030 images |
-| Validation | 246 images |
-| Test | 248 images |
+| Training Images | 2,030 |
+| Validation Images | 246 |
+| Test Images | 248 |
 
-The main generalization evaluation was performed using an independent test dataset containing 243 test images.
+The main generalization evaluation was performed on an independent test dataset containing **243 test images**.
+
+### Independent Test Results
 
 | Metric | Result |
 |---|---:|
@@ -119,7 +123,7 @@ The main generalization evaluation was performed using an independent test datas
 | mAP@0.5 | 95.76% |
 | mAP@0.5:0.95 | 82.12% |
 
-More details are available in:
+More training and evaluation details are available in:
 
 [`docs/training/`](docs/training/)
 
@@ -127,16 +131,16 @@ More details are available in:
 
 ## Real-Time Deployment
 
-The real-time vision application uses:
+The real-time vision application uses the following configuration:
 
 ```text
-Model: YOLOv8s
-Input size: 320
-Confidence threshold: 0.60
-Camera: USB Webcam
+Model                : YOLOv8s
+Inference Image Size : 320
+Confidence Threshold : 0.60
+Camera               : USB Webcam
 ```
 
-Observed display speed during system testing:
+The observed display speed during system testing was approximately:
 
 ```text
 30.2 - 31.4 FPS
@@ -146,14 +150,14 @@ Observed display speed during system testing:
 
 ## STM32 Responsibilities
 
-STM32F103C6T6 is responsible for:
+The STM32F103C6T6 is responsible for:
 
 - Receiving classification results from the PC through UART
 - Storing classification commands in a FIFO queue
 - Reading two IR sensors
 - Generating PWM signals for two servo motors
-- Executing the Good / Bad sorting sequence
-- Updating Good / Bad counters
+- Executing the `Good` / `Bad` sorting sequence
+- Updating Good and Bad product counters
 - Displaying information on the LCD
 - Sending status information back to the PC
 
@@ -170,11 +174,11 @@ The PC application is responsible for:
 - Capturing frames from the USB webcam
 - Running YOLOv8s inference
 - Detecting and tracking lemons
-- Stabilizing the predicted class
+- Stabilizing predicted classes
 - Detecting when an object crosses the sorting line
 - Preventing duplicate UART commands
-- Sending `Good` / `Bad` classification commands to STM32
-- Reading STM32 status
+- Sending classification commands to STM32
+- Reading STM32 status messages
 - Displaying detection results and FPS
 
 More details:
@@ -183,7 +187,7 @@ More details:
 
 ---
 
-## Communication Flow
+## System Processing Flow
 
 ```text
 Webcam
@@ -221,9 +225,9 @@ LCD Counter Update
 
 ---
 
-## UART Commands
+## UART Communication
 
-The PC sends classification results to STM32 using UART:
+The PC sends classification results to STM32 using single-character UART commands.
 
 | Command | Classification |
 |---|---|
@@ -233,10 +237,10 @@ The PC sends classification results to STM32 using UART:
 UART configuration:
 
 ```text
-Baud rate : 9600 bps
-Data bits : 8
+Baud Rate : 9600 bps
+Data Bits : 8
 Parity    : None
-Stop bits : 1
+Stop Bits : 1
 ```
 
 ---
@@ -247,10 +251,10 @@ Stop bits : 1
 |---|---|---|
 | USART1 TX | PA9 | STM32 → CH340 |
 | USART1 RX | PA10 | CH340 → STM32 |
-| Servo 1 | PA0 | Good sorting |
-| Servo 2 | PA1 | Bad sorting |
-| IR Sensor 1 | PB0 | Good position |
-| IR Sensor 2 | PB1 | Bad position |
+| Servo 1 | PA0 | Good sorting mechanism |
+| Servo 2 | PA1 | Bad sorting mechanism |
+| IR Sensor 1 | PB0 | Good sorting position |
+| IR Sensor 2 | PB1 | Bad sorting position |
 | I2C SCL | PB6 | LCD clock |
 | I2C SDA | PB7 | LCD data |
 
@@ -262,6 +266,10 @@ Stop bits : 1
 stm32-lemon-sorting/
 │
 ├── README.md
+│
+├── requirements.txt
+│
+├── .gitignore
 │
 ├── docs/
 │   ├── datasets/
@@ -296,26 +304,22 @@ stm32-lemon-sorting/
 
 ## Demo
 
-Demo video:
-
-## Demo
-
 [Watch Demo Video](https://drive.google.com/file/d/1tyYr8zXwPygE4yLUJ9bT8ScqUixk7lFU/view?usp=sharing)
 
 ---
 
 ## How It Works
 
-1. The webcam captures a lemon moving on the conveyor.
-2. YOLOv8s detects the lemon and predicts `Good` or `Bad`.
-3. The program tracks the lemon between video frames.
-4. The predicted class must remain stable before being accepted.
-5. When the lemon crosses the sorting line, the PC sends the classification result through UART.
+1. The USB webcam captures a lemon moving on the conveyor belt.
+2. YOLOv8s detects the lemon and predicts its class as `Good` or `Bad`.
+3. The application tracks the lemon across consecutive frames.
+4. The predicted class must remain stable before it is accepted.
+5. When the lemon reaches the sorting line, the PC sends the classification result through UART.
 6. STM32 stores the received result in a FIFO queue.
 7. The corresponding IR sensor detects the lemon near the sorting mechanism.
-8. STM32 activates the appropriate servo.
+8. STM32 activates the appropriate servo motor.
 9. The lemon is pushed into the corresponding sorting area.
-10. The Good / Bad counter is updated on the LCD.
+10. The Good or Bad counter is updated on the LCD.
 
 ---
 
@@ -325,4 +329,4 @@ This project was developed as a graduation project combining:
 
 **Computer Vision + Embedded Firmware + UART Communication + Sensor/Actuator Control**
 
-The project demonstrates the integration of a real-time object detection model with an STM32-based embedded control system.
+The project demonstrates the integration of a real-time computer vision system with an STM32-based embedded controller for automatic product sorting.
