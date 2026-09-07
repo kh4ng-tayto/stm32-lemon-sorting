@@ -1,8 +1,8 @@
 # STM32-Based Lemon Sorting System
 
-Hệ thống phân loại chất lượng quả chanh tự động trên băng chuyền sử dụng **YOLOv8s**, **OpenCV** và **STM32F103C6T6**.
+An automated lime quality grading system on a conveyor belt utilizing **YOLOv8s**, **OpenCV**, and the **STM32F103C6T6** microcontroller.
 
-Webcam thu nhận hình ảnh quả chanh theo thời gian thực. Máy tính sử dụng YOLOv8s để phát hiện và phân loại sản phẩm thành hai lớp `Good` và `Bad`. Kết quả phân loại được truyền đến STM32 thông qua UART để điều khiển cảm biến, servo và cập nhật thông tin trên LCD.
+A webcam captures real-time images of the limes. A computer employs YOLOv8s to detect and classify the produce into two categories: "Good" and "Bad." The classification results are transmitted to the STM32 via UART to control sensors and servos, as well as to update information on an LCD display.
 
 ---
 
@@ -298,7 +298,7 @@ stm32-lemon-sorting/
 
 Demo video:
 
-[Watch Demo Video]([YOUR_DEMO_VIDEO_LINK](https://drive.google.com/file/d/1tyYr8zXwPygE4yLUJ9bT8ScqUixk7lFU/view?usp=sharing))
+[Watch Demo Video]([link video demo].
 
 ---
 
