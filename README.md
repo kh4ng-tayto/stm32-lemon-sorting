@@ -298,7 +298,9 @@ stm32-lemon-sorting/
 
 Demo video:
 
-[Watch Demo Video]([YOUR_DEMO_VIDEO_LINK](https://drive.google.com/file/d/1tyYr8zXwPygE4yLUJ9bT8ScqUixk7lFU/view?usp=sharing))
+## Demo
+
+[Watch Demo Video](https://drive.google.com/file/d/1tyYr8zXwPygE4yLUJ9bT8ScqUixk7lFU/view?usp=sharing)
 
 ---
 
