@@ -165,11 +165,11 @@ Kết quả của mô hình trên tập Validation:
 
 ### Precision-Recall Curve
 
-![Validation PR Curve](images/pr_curve_validatio.png)
+![Validation PR Curve](images/BoxPR_curve.png)
 
 ### Confusion Matrix
 
-![Validation Confusion Matrix](images/confusion_matrix_validation.png)
+![Validation Confusion Matrix](images/confusion_matrix_normalized.png)
 
 Kết quả Validation cho thấy mô hình có khả năng nhận diện tốt hai lớp `Good` và `Bad` trên dữ liệu xác thực được sử dụng trong quá trình huấn luyện.
 
@@ -243,11 +243,11 @@ AP@0.5 theo từng lớp:
 
 ### Precision-Recall Curve
 
-![Independent Test PR Curve](images/pr_curve_independent.png)
+![Independent Test PR Curve](images/BoxPR_curve_independent.png)
 
 ### Confusion Matrix
 
-![Independent Test Confusion Matrix](images/confusion_matrix_independent.png)
+![Independent Test Confusion Matrix](images/confusion_matrix_normalized_independent.png)
 
 Kết quả trên bộ dữ liệu độc lập được sử dụng làm **kết quả chính** để đánh giá khả năng tổng quát hóa của mô hình.
 
