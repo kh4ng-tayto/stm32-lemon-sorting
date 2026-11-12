@@ -116,12 +116,22 @@ The main generalization evaluation was performed on an independent test dataset 
 
 ### Independent Test Results
 
-| Metric | Result |
-|---|---:|
-| Precision | 95.32% |
-| Recall | 92.90% |
-| mAP@0.5 | 95.76% |
-| mAP@0.5:0.95 | 82.12% |
+### External Test Evaluation (v4)
+
+The final YOLOv8s checkpoint was evaluated on the v4 test partition. An overlap audit identified 24 exact duplicate images shared with the v7 validation partition. A supplementary evaluation was therefore performed after excluding these images.
+
+| Metric | Full Test (243 images) | Exact-Overlap-Filtered Test (219 images) |
+|---|---:|---:|
+| Precision | 94.65% | 93.37% |
+| Recall | 96.46% | 96.22% |
+| mAP@0.5 | 98.68% | 98.60% |
+| mAP@0.5:0.95 | 85.43% | 84.79% |
+
+The filtered test subset contains 241 annotated objects (206 Bad and 35 Good).
+
+**Evaluation configuration:** Ultralytics 8.4.132, image size 320, confidence threshold 0.001, NMS IoU 0.7, batch size 16.
+
+The two datasets were collected separately, but image-level overlap was detected. Therefore, these results should not be interpreted as proof of complete physical-fruit independence.
 
 More training and evaluation details are available in:
 
