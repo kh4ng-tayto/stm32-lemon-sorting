@@ -97,8 +97,8 @@ A USB webcam captures lemons moving on a conveyor belt. The PC processes the cam
 The YOLOv8s model detects two lemon quality classes:
 
 ```text
-0 - Good
-1 - Bad
+0 - Bad
+1 - Good
 ```
 
 ### Dataset
