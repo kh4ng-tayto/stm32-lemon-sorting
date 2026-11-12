@@ -106,7 +106,7 @@ The YOLOv8s model detects two lemon quality classes:
 | Information | Value |
 |---|---:|
 | Total Images | 2,524 |
-| Total Objects | 3,353 |
+| Total Objects | 3,352 (YOLO export) |
 | Classes | 2 |
 | Training Images | 2,030 |
 | Validation Images | 246 |
