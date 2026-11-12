@@ -398,3 +398,24 @@ Physical Sorting
 ```
 
 This architecture separates computer vision processing from embedded hardware control.
+
+
+### Model Weights
+
+The final YOLOv8s checkpoint is provided through GitHub Releases for reproducibility.
+
+**Download the checkpoint:**
+
+https://github.com/kh4ng-tayto/stm32-lemon-sorting/releases/download/v1.0-model/best.pt
+
+After downloading, place the checkpoint at:
+
+`vision/best.pt`
+
+**Checkpoint SHA-256:**
+
+`882a065c0d5e4be609dff9150ddeded31b1d996f9dd2700ec637e5def6b0efd2`
+
+This checkpoint was used to evaluate the exact-overlap-filtered test set of 219 images (241 annotated objects) with Ultralytics 8.4.132, image size 320, confidence threshold 0.001, and NMS IoU threshold 0.7.
+
+The evaluation achieved mAP@0.5 of 0.985962 and mAP@0.5:0.95 of 0.847882.
