@@ -9,7 +9,7 @@
 | GND   | GND           | Bắt buộc nối chung |
 | 5V    | *không dùng*  | STM32 cấp nguồn riêng qua USB |
 
-> **Baud rate**: 115200 (cấu hình giống nhau ở cả Python và STM32)
+> **Baud rate**: 9600 (cấu hình giống nhau ở cả Python và STM32)
 
 ## 2. Kết nối ST-LINK V2 (chỉ dùng khi nạp chương trình)
 
