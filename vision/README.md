@@ -406,7 +406,7 @@ The final YOLOv8s checkpoint is provided through GitHub Releases for reproducibi
 
 **Download the checkpoint:**
 
-https://github.com/kh4ng-tayto/stm32-lemon-sorting/releases/download/v1.0-model/best.pt
+[https://github.com/kh4ng-tayto/stm32-lemon-sorting/releases/download/v1.0-model/best.pt](https://github.com/kh4ng-tayto/stm32-lemon-sorting/releases/download/v1.0-model/best.pt)
 
 After downloading, place the checkpoint at:
 
