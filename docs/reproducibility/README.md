@@ -201,23 +201,3 @@ remove all near-duplicates or establish physical-fruit
 independence.
 ```
 
-Sau đó nhấn **Commit changes**.
-
-### Trạng thái Mục 4 hiện tại
-
-<box gap={2}>
-  <row align="center" justify="between">
-    <text color="secondary" weight="medium" size="sm">Mức độ hoàn thiện tài liệu tái lập</text>
-    **Gần hoàn tất**
-  </row>
-  <box background="surface-tertiary" height="8px" radius="full" clip>
-    <box background="rgba(22,163,74,0.85)" width="90%" height="100%" radius="full"/>
-  </box>
-  <text size="sm" color="secondary">Đã có training logs, mã nguồn, checkpoint công bố, thông tin phần mềm, cấu hình phần cứng, latency logs, dataset audit và script đánh giá.</text>
-</box>
-
-Sau khi thêm hướng dẫn, chúng ta còn cần **chạy thử script trực tiếp với dataset v4 và checkpoint thật** để xác nhận khả năng tái lập đầu cuối. Hiện tại mình mới kiểm tra nội dung code, chưa xác nhận script đã chạy thành công.
-
-Các giới hạn Fruit ID và power consumption đã được ghi rõ, nên không cần tạo thêm số liệu.
-
-**Bạn thêm Mục 8 vào README rồi báo mình nhé.** Khi đó mình sẽ kiểm tra lần cuối, sau đó giúp bạn đưa phần Reproducibility đã hoàn thiện vào paper ICAI-2026.
