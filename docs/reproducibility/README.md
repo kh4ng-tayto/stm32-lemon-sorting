@@ -128,3 +128,96 @@ configuration review, and independent verification of
 the documented experiments where the required data
 and equipment are available.
 
+## 8. Reproducing the Filtered Test Evaluation
+
+The evaluation script is available at:
+
+[evaluate_clean_test.py](evaluate_clean_test.py)
+
+### Required Inputs
+
+- Original v4 dataset with 243 test images and YOLO labels
+- Final YOLOv8s checkpoint (`best.pt`)
+- [Exact duplicate records](exact_duplicates.csv)
+
+The original image and annotation files are required
+to reproduce the reported detection metrics.
+
+### Installation
+
+Install the required Ultralytics version:
+
+```bash
+pip install ultralytics==8.4.132
+```
+
+### Run Evaluation
+
+From the repository root, execute:
+
+```bash
+python docs/reproducibility/evaluate_clean_test.py \
+  --v4-root /path/to/v4_dataset \
+  --weights /path/to/best.pt \
+  --device 0
+```
+
+Replace the example paths with the actual dataset and
+checkpoint locations.
+
+For CPU-only environments, use `--device cpu`.
+
+### Expected Results
+
+The script removes 24 exact-overlap images and evaluates
+the remaining 219 images containing 241 annotations.
+
+| Metric | Expected value |
+|---|---:|
+| Precision | 0.9337 |
+| Recall | 0.9622 |
+| mAP50 | 0.9860 |
+| mAP50:95 | 0.8479 |
+
+The evaluation generates:
+
+- `clean_test_metrics.csv`
+- `evaluation_config.json`
+- Evaluation plots
+
+Results are saved under `reproducibility_output/`.
+
+### Dataset Audit
+
+Additional supporting materials include:
+
+- [Dataset manifest](dataset_manifest.csv)
+- [Exact duplicates](exact_duplicates.csv)
+- [Near-duplicate candidates](near_duplicates.csv)
+- [Near-duplicate review image](near_duplicate_review.png)
+
+The script removes exact duplicates only. It does not
+remove all near-duplicates or establish physical-fruit
+independence.
+```
+
+Sau đó nhấn **Commit changes**.
+
+### Trạng thái Mục 4 hiện tại
+
+<box gap={2}>
+  <row align="center" justify="between">
+    <text color="secondary" weight="medium" size="sm">Mức độ hoàn thiện tài liệu tái lập</text>
+    **Gần hoàn tất**
+  </row>
+  <box background="surface-tertiary" height="8px" radius="full" clip>
+    <box background="rgba(22,163,74,0.85)" width="90%" height="100%" radius="full"/>
+  </box>
+  <text size="sm" color="secondary">Đã có training logs, mã nguồn, checkpoint công bố, thông tin phần mềm, cấu hình phần cứng, latency logs, dataset audit và script đánh giá.</text>
+</box>
+
+Sau khi thêm hướng dẫn, chúng ta còn cần **chạy thử script trực tiếp với dataset v4 và checkpoint thật** để xác nhận khả năng tái lập đầu cuối. Hiện tại mình mới kiểm tra nội dung code, chưa xác nhận script đã chạy thành công.
+
+Các giới hạn Fruit ID và power consumption đã được ghi rõ, nên không cần tạo thêm số liệu.
+
+**Bạn thêm Mục 8 vào README rồi báo mình nhé.** Khi đó mình sẽ kiểm tra lần cuối, sau đó giúp bạn đưa phần Reproducibility đã hoàn thiện vào paper ICAI-2026.
