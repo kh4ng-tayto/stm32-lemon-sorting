@@ -1,0 +1,2 @@
+model,images,instances,bad_instances,good_instances,removed_exact_duplicates,imgsz,confidence,nms_iou,batch,ultralytics_version,precision,recall,mAP50,mAP50_95,checkpoint_sha256,evaluated_at_utc
+YOLOv8s,219,241,206,35,24,320,0.001,0.7,16,8.4.132,0.9336512569716969,0.9621704850275252,0.9859619112221675,0.8478823726042208,882a065c0d5e4be609dff9150ddeded31b1d996f9dd2700ec637e5def6b0efd2,2026-11-12T11:09:03.195682+00:00
