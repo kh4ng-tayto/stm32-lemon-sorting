@@ -282,6 +282,26 @@ Các lần đánh giá trên tập Test v4 sử dụng checkpoint YOLOv8s cuối
 | Device | NVIDIA Tesla T4 |
 | Ultralytics | 8.4.132 |
 
+### Software Environment
+
+The following software versions were recorded from the Kaggle evaluation environment:
+
+| Component | Version |
+|---|---|
+| Python | 3.12.13 |
+| PyTorch | 2.10.0+cu128 |
+| CUDA (PyTorch) | 12.8 |
+| Ultralytics | 8.4.132 |
+| OpenCV | 4.13.0.92 |
+| NumPy | 2.4.6 |
+| Pandas | 2.3.3 |
+| Torchvision | 0.25.0+cu128 |
+| GPU | NVIDIA Tesla T4 |
+
+PySerial was not installed in the Kaggle environment because UART communication was not required for offline model evaluation.
+
+These versions describe the inspected evaluation environment and should not be assumed to represent the original training environment without further verification.
+
 Cấu hình này áp dụng cho kết quả đánh giá v4 được báo cáo trong Mục 9 và Mục 10.
 
 Checkpoint có thể tải tại:
