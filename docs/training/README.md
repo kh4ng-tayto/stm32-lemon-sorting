@@ -197,59 +197,57 @@ AP@0.5 theo từng lớp:
 
 ---
 
-## 9. Kiểm thử trên bộ dữ liệu độc lập
 
-Để đánh giá khả năng tổng quát hóa trên dữ liệu chưa được sử dụng trong quá trình huấn luyện, mô hình được kiểm tra thêm trên một bộ dữ liệu độc lập.
+## 9. Kiểm thử trên bộ dữ liệu v4
 
-Bộ dữ liệu độc lập được thu thập trong một đợt riêng và không được sử dụng để:
+Để đánh giá khả năng tổng quát hóa, mô hình YOLOv8s được kiểm thử bổ sung trên bộ dữ liệu v4, được thu thập trong một đợt riêng với bộ dữ liệu huấn luyện v7.
 
-- Huấn luyện mô hình
-- Lựa chọn epoch
-- Điều chỉnh mô hình
+Bộ dữ liệu v4 gồm 246 ảnh:
+- Test: 243 ảnh
+- Validation: 3 ảnh
+- Train: 0 ảnh
 
-Phiên bản dữ liệu độc lập gồm:
+Tập Test ban đầu chứa 243 ảnh và 265 đối tượng, gồm 220 Bad và 45 Good.
+
+### 9.1. Kiểm tra trùng lặp dữ liệu
+
+Quá trình kiểm tra tính độc lập dữ liệu phát hiện 24 ảnh trùng chính xác giữa tập Test v4 và tập Validation v7.
+
+Ngoài ra, phép kiểm tra bằng dHash phát hiện 291 cặp ảnh có độ tương đồng cao. Các ảnh nghi ngờ đã được kiểm tra trực quan, cho thấy sự trùng lặp hoặc tương đồng về nội dung ảnh giữa hai bộ dữ liệu.
+
+Do đó, việc thu thập dữ liệu ở các đợt khác nhau không đảm bảo tính độc lập hoàn toàn ở mức hình ảnh hoặc từng quả chanh.
+
+### 9.2. Tạo tập kiểm thử sau khi loại ảnh trùng chính xác
+
+Để đánh giá ảnh hưởng của việc trùng lặp, 24 ảnh trùng chính xác với tập Validation v7 được loại khỏi tập Test v4.
+
+Tập kiểm thử sau khi lọc gồm:
 
 | Thông tin | Giá trị |
 |---|---:|
-| Tổng số ảnh | 246 |
-| Test | 243 |
-| Validation | 3 |
-| Train | 0 |
-| Tổng số đối tượng | 268 |
+| Số ảnh ban đầu | 243 |
+| Số ảnh loại bỏ | 24 |
+| Số ảnh còn lại | 219 |
+| Bad | 206 |
+| Good | 35 |
+| Tổng số đối tượng | 241 |
 
-Kết quả đánh giá chính được tính trên **243 ảnh Test chứa 265 đối tượng**:
+Việc lọc này chỉ loại bỏ các ảnh trùng chính xác đã xác định. Các trường hợp near-duplicate khác chưa được loại khỏi tập kiểm thử.
 
-| Class | Số đối tượng |
-|---|---:|
-| Bad | 220 |
-| Good | 45 |
-| **Tổng cộng** | **265** |
+### 9.3. Kết quả đánh giá YOLOv8s
 
-### Kết quả đánh giá
+Mô hình YOLOv8s cuối cùng được đánh giá tại độ phân giải 320 pixels, confidence 0.001 và NMS IoU 0.7, sử dụng Ultralytics 8.4.132.
 
-| Metric | Kết quả |
-|---|---:|
-| Precision | **95,32%** |
-| Recall | **92,90%** |
-| mAP@0.5 | **95,76%** |
-| mAP@0.5:0.95 | **82,12%** |
+| Metric | Test gốc (243 ảnh) | Test sau lọc (219 ảnh) |
+|---|---:|---:|
+| Precision | 94.65% | 93.37% |
+| Recall | 96.46% | 96.22% |
+| mAP@0.5 | 98.68% | 98.60% |
+| mAP@0.5:0.95 | 85.43% | 84.79% |
 
-AP@0.5 theo từng lớp:
+Sau khi loại bỏ 24 ảnh trùng chính xác, mAP@0.5:0.95 giảm từ 85.43% xuống 84.79%, tương đương khoảng 0.64 điểm phần trăm.
 
-| Class | AP@0.5 |
-|---|---:|
-| Bad | 93,2% |
-| Good | 98,4% |
-
-### Precision-Recall Curve
-
-![Independent Test PR Curve](images/BoxPR_curve_independent.png)
-
-### Confusion Matrix
-
-![Independent Test Confusion Matrix](images/confusion_matrix_normalized_independent.png)
-
-Kết quả trên bộ dữ liệu độc lập được sử dụng làm **kết quả chính** để đánh giá khả năng tổng quát hóa của mô hình.
+Kết quả cho thấy hiệu năng của mô hình vẫn tương đối ổn định sau khi loại bỏ phần trùng lặp chính xác đã xác định. Tuy nhiên, kết quả này không chứng minh được tính độc lập hoàn toàn ở mức từng quả chanh vật lý.
 
 ---
 
@@ -257,43 +255,41 @@ Kết quả trên bộ dữ liệu độc lập được sử dụng làm **kế
 
 | Dataset | Precision | Recall | mAP@0.5 | mAP@0.5:0.95 |
 |---|---:|---:|---:|---:|
-| Validation | 98,66% | 96,54% | 99,39% | 92,15% |
-| Roboflow v7 Test | 98,53% | 96,88% | 98,67% | 90,80% |
-| **Independent Test** | **95,32%** | **92,90%** | **95,76%** | **82,12%** |
+| Validation v7 | 98.66% | 96.54% | 99.39% | 92.15% |
+| Roboflow v7 Test | 98.53% | 96.88% | 98.67% | 90.80% |
+| v4 Test (243 ảnh) | 94.65% | 96.46% | 98.68% | 85.43% |
+| v4 Test sau lọc (219 ảnh) | 93.37% | 96.22% | 98.60% | 84.79% |
 
-Kết quả trên bộ dữ liệu độc lập thấp hơn so với Validation và Test v7 nhưng phản ánh thực tế hơn khả năng tổng quát hóa của mô hình trên dữ liệu chưa được sử dụng trong quá trình phát triển mô hình.
+Kết quả trên tập Test v4 và tập Test sau lọc được sử dụng để phân tích khả năng tổng quát hóa và ảnh hưởng của hiện tượng trùng lặp ảnh.
+
+Các kết quả này cần được diễn giải trong giới hạn của dữ liệu hiện có, do chưa xác minh được tính độc lập hoàn toàn giữa các quả chanh vật lý.
 
 ---
 
 ## 11. Cấu hình đánh giá
 
-Các lần đánh giá ngoại tuyến sử dụng trọng số tốt nhất `best.pt`.
+Các lần đánh giá trên tập Test v4 sử dụng checkpoint YOLOv8s cuối cùng.
 
 | Tham số | Giá trị |
 |---|---|
-| Weights | `best.pt` |
-| Method | `model.val()` |
-| Split | `test` |
-| Image Size | `640 × 640` |
+| Model | YOLOv8s |
+| Weights | best.pt |
+| Evaluation | model.val() |
+| Image Size | 320 |
+| Confidence | 0.001 |
+| NMS IoU | 0.7 |
 | Batch Size | 16 |
 | Device | NVIDIA Tesla T4 |
-| Plots | `True` |
 | Ultralytics | 8.4.132 |
 
-Ví dụ lệnh đánh giá:
+Cấu hình này áp dụng cho kết quả đánh giá v4 được báo cáo trong Mục 9 và Mục 10.
 
-```python
-results = model.val(
-    data=DATA_YAML,
-    split="test",
-    imgsz=640,
-    batch=16,
-    device=0,
-    plots=True
-)
-```
+Checkpoint có thể tải tại:
 
----
+https://github.com/kh4ng-tayto/stm32-lemon-sorting/releases/download/v1.0-model/best.pt
+
+Việc tái lập kết quả yêu cầu sử dụng đúng checkpoint, bộ dữ liệu, cấu hình đánh giá và phiên bản phần mềm tương ứng.
+
 
 ## 12. Triển khai mô hình
 
@@ -384,20 +380,24 @@ Máy tính đảm nhiệm xử lý ảnh và chạy YOLOv8s. STM32F103C6T6 nhậ
 
 ---
 
+
 ## 14. Kết luận
 
-Mô hình YOLOv8s được huấn luyện trên bộ dữ liệu gồm **2.524 ảnh và 3.353 đối tượng** thuộc hai lớp `Good` và `Bad`.
+Mô hình YOLOv8s được huấn luyện trên bộ dữ liệu Roboflow v7 gồm 2.524 ảnh và 3.352 đối tượng trong bản xuất YOLO, thuộc hai lớp Bad và Good.
 
-Kết quả chính trên bộ dữ liệu kiểm thử độc lập gồm 243 ảnh đạt:
+Mô hình được đánh giá bổ sung trên bộ dữ liệu v4 gồm 243 ảnh Test. Sau khi kiểm tra trùng lặp, 24 ảnh trùng chính xác với tập Validation v7 được loại bỏ.
 
-- **Precision: 95,32%**
-- **Recall: 92,90%**
-- **mAP@0.5: 95,76%**
-- **mAP@0.5:0.95: 82,12%**
+Kết quả trên 219 ảnh còn lại đạt:
 
-Sau khi đánh giá, trọng số tốt nhất `best.pt` được sử dụng trong chương trình Python để nhận diện quả chanh theo thời gian thực và truyền kết quả phân loại đến STM32F103C6T6 thông qua UART.
+- Precision: 93.37%
+- Recall: 96.22%
+- mAP@0.5: 98.60%
+- mAP@0.5:0.95: 84.79%
 
----
+Kết quả sau lọc cho thấy mô hình vẫn duy trì hiệu năng phát hiện tốt trên tập dữ liệu được kiểm tra. Tuy nhiên, nghiên cứu chưa thể xác nhận tính độc lập hoàn toàn ở mức từng quả chanh vật lý.
+
+Checkpoint YOLOv8s và mã nguồn triển khai được cung cấp trong repository để hỗ trợ việc kiểm tra và tái lập các kết quả đã báo cáo.
+
 
 ## Cấu trúc thư mục
 
