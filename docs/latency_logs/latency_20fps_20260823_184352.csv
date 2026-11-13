@@ -1,0 +1,1 @@
+event_id,timestamp,track_id,class,confidence,target_fps,actual_fps,frame_period_ms,camera_reported_fps,capture_ms,predict_wall_ms,preprocess_ms,inference_ms,postprocess_ms,model_total_ms,pc_to_uart_ms,uart_ack_rtt_ms,stm_rx_to_ir_ms,stm_ir_to_servo_cmd_ms,stm_rx_to_servo_cmd_ms,approx_camera_to_servo_cmd_ms,status
