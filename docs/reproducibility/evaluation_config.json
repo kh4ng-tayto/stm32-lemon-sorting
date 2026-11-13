@@ -1,0 +1,24 @@
+{
+  "weights": "/kaggle/input/datasets/khangle311a/testlemonreview/best.pt",
+  "v4_root": "/kaggle/input/datasets/khangle311a/lemonreview",
+  "exact_csv": "/kaggle/input/datasets/khangle311a/lemon-exact-duplicates/exact_duplicates.csv",
+  "metrics": {
+    "model": "YOLOv8s",
+    "images": 219,
+    "instances": 241,
+    "bad_instances": 206,
+    "good_instances": 35,
+    "removed_exact_duplicates": 24,
+    "imgsz": 320,
+    "confidence": 0.001,
+    "nms_iou": 0.7,
+    "batch": 16,
+    "ultralytics_version": "8.4.132",
+    "precision": 0.9336512569716969,
+    "recall": 0.9621704850275252,
+    "mAP50": 0.9859619112221675,
+    "mAP50_95": 0.8478823726042208,
+    "checkpoint_sha256": "882a065c0d5e4be609dff9150ddeded31b1d996f9dd2700ec637e5def6b0efd2",
+    "evaluated_at_utc": "2026-11-13T08:40:48.980273+00:00"
+  }
+}
