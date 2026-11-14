@@ -1,0 +1,4 @@
+segment,first_observed_ge_1,first_observed_ge_2,first_observed_ge_3,first_observed_ge_5,first_observed_send
+S03_BAD,77.0,77.1,77.1,77.3,77.3
+S05_BAD,297.6,297.6,297.7,298.0,298.2
+S06_GOOD_AFTER_BAD,369.3,369.4,369.5,369.7,369.8
