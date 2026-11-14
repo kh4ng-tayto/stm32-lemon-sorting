@@ -1,0 +1,2 @@
+model,test_images,imgsz,confidence,nms_iou,batch,precision,recall,mAP50,mAP50_95,ultralytics,device,checkpoint_sha256
+YOLO11n,243,320,0.001,0.7,16,0.9645969970659618,0.9712635888476074,0.9931678801411898,0.8535845321208569,8.4.132,0,cd191ecd13a2f7d4b4474e8feab0b57470c5330feb253d49d980f72afa7f46ea
